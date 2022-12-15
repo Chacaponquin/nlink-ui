@@ -28,12 +28,14 @@ public class FileUtils {
     }
     
     public static void readDataBase(){   
+        FileUtils.allData = new ArrayList();
         Path rootDir = Paths.get(".").normalize().toAbsolutePath();
         File file = new File(rootDir.toString() + "/src/data/" + "bezdekIris.data");
+        
         if (file.exists()) {
         try {
             Reader input = new FileReader(file);
-            // Checks if reader is ready
+           
             BufferedReader br = new BufferedReader(input);
             String line = br.readLine();
             while (line != null && !line.equals("")) {       
