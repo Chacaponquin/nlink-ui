@@ -57,11 +57,11 @@ public class TrainerData {
         this.neuron3 = v;
     }
     
-    public float getNeuronFourdValue(){
+    public float getNeuronForthValue(){
         return this.neuron4;
     }
     
-    public void setNeuronFourValue(float v){
+    public void setNeuronForthValue(float v){
         this.neuron4 = v;
     }
     

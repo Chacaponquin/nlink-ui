@@ -1,24 +1,76 @@
 package ui;
 
+import java.awt.GridLayout;
+import javax.swing.JPanel;
+import javax.swing.JLabel;
 import util.FileUtils;
 import util.FormData;
+import util.TrainerData;
 
 /**
  *
  * @author Hector Angel Gomez
  */
 public class UI extends javax.swing.JFrame {
-
+    
     FormData form;
-
+    
     public UI() {
         this.initComponents();
         this.initFormLables();
         this.initForm();
-
+        
+        this.GraphPanel.setVisible(true);
+        this.Examples.setVisible(false);
+        
         this.setLocationRelativeTo(null);
     }
-
+    
+    private void showExamples() {
+        FileUtils.readDataBase();
+        
+        Examples.setVisible(true);
+        this.GraphPanel.setVisible(false);
+        GridLayout layout = new GridLayout(FileUtils.allData.size() + 1, 1);
+        
+        JLabel header = new JLabel("Total de ejemplos: " + String.valueOf(59) + "   " + "Bien Clasificados: " + String.valueOf(50));
+        header.setFont(new java.awt.Font("Segoe UI", 1, 24));
+        JPanel headerPanel = new JPanel();
+        headerPanel.setLayout(new GridLayout(1, 1));
+        headerPanel.add(header);
+        
+        layout.setVgap(15);
+        
+        Examples.setLayout(layout);
+        Examples.add(headerPanel);
+        
+        for (int i = 0; i < FileUtils.allData.size(); i++) {
+            TrainerData d = FileUtils.allData.get(i);
+            
+            JPanel panel = new JPanel();
+            panel.setLayout(new GridLayout(2, 1));
+            
+            String text1 = "";
+            text1 += "Valor 1: " + String.valueOf(d.getNeuronOneValue()) + ", ";
+            text1 += "Valor 2: " + String.valueOf(d.getNeuronSecondValue()) + ", ";
+            text1 += "Valor 3: " + String.valueOf(d.getNeuronThirdValue()) + ", ";
+            text1 += "Valor 4: " + String.valueOf(d.getNeuronForthValue());
+            
+            String text2 = "Expected: " + d.getResult();
+            text2 += ", Result: Isia";
+            
+            JLabel lab = new JLabel(text1);
+            lab.setFont(new java.awt.Font("Segoe UI", 1, 18));
+            
+            JLabel lab2 = new JLabel(text2);
+            lab2.setFont(new java.awt.Font("Segoe UI", 1, 18));
+            
+            panel.add(lab); 
+            panel.add(lab2);
+            Examples.add(panel);
+        }
+    }
+    
     private void initForm() {
         float v1 = this.changeSliderValue(this.inputFirstSlider.getValue());
         float v2 = this.changeSliderValue(this.inputSecondSlider.getValue());
@@ -26,18 +78,18 @@ public class UI extends javax.swing.JFrame {
         float v4 = this.changeSliderValue(this.inputForthSlider.getValue());
         this.form = new FormData(v1, v2, v3, v4);
     }
-
+    
     private void initFormLables() {
         this.inputFirstLabel.setText(String.valueOf(this.inputFirstSlider.getValue()));
         this.inputSecondLabel.setText(String.valueOf(this.inputSecondSlider.getValue()));
         this.inputThirdLabel.setText(String.valueOf(this.inputThirdSlider.getValue()));
         this.inputForthLabel.setText(String.valueOf(this.inputForthSlider.getValue()));
     }
-
+    
     private float changeSliderValue(int v) {
         return (float) v / 10;
     }
-
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -56,8 +108,10 @@ public class UI extends javax.swing.JFrame {
         inputSecondLabel = new javax.swing.JLabel();
         inputThirdLabel = new javax.swing.JLabel();
         inputForthLabel = new javax.swing.JLabel();
+        ContentPanel = new javax.swing.JPanel();
+        ExamplesPanel = new javax.swing.JScrollPane();
+        Examples = new javax.swing.JPanel();
         GraphPanel = new javax.swing.JPanel();
-        EjemplosPanel = new javax.swing.JScrollPane();
         Menu = new javax.swing.JMenuBar();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -191,22 +245,51 @@ public class UI extends javax.swing.JFrame {
                     .addComponent(inputForthLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(inputForthSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 258, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton1)
                 .addGap(26, 26, 26))
         );
+
+        ExamplesPanel.setBorder(null);
+        ExamplesPanel.setForeground(new java.awt.Color(255, 255, 255));
+
+        Examples.setForeground(new java.awt.Color(255, 255, 255));
+        Examples.setLayout(new java.awt.GridLayout(3, 1));
+        ExamplesPanel.setViewportView(Examples);
 
         javax.swing.GroupLayout GraphPanelLayout = new javax.swing.GroupLayout(GraphPanel);
         GraphPanel.setLayout(GraphPanelLayout);
         GraphPanelLayout.setHorizontalGroup(
             GraphPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, GraphPanelLayout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(EjemplosPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 984, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGap(0, 986, Short.MAX_VALUE)
         );
         GraphPanelLayout.setVerticalGroup(
             GraphPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(EjemplosPanel)
+            .addGap(0, 656, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout ContentPanelLayout = new javax.swing.GroupLayout(ContentPanel);
+        ContentPanel.setLayout(ContentPanelLayout);
+        ContentPanelLayout.setHorizontalGroup(
+            ContentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(ContentPanelLayout.createSequentialGroup()
+                .addGap(106, 106, 106)
+                .addComponent(GraphPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(ContentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ContentPanelLayout.createSequentialGroup()
+                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(ExamplesPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 1131, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap()))
+        );
+        ContentPanelLayout.setVerticalGroup(
+            ContentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(ContentPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(GraphPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+            .addGroup(ContentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(ExamplesPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 668, Short.MAX_VALUE))
         );
 
         Menu.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -229,7 +312,7 @@ public class UI extends javax.swing.JFrame {
         jMenu2.add(jMenuItem1);
 
         jMenuItem2.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
-        jMenuItem2.setText("Ejemplos");
+        jMenuItem2.setText("Probar Ejemplos");
         jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem2ActionPerformed(evt);
@@ -248,12 +331,12 @@ public class UI extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(FormPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(GraphPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(ContentPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(FormPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(GraphPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(ContentPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -268,7 +351,7 @@ public class UI extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void inputFirstSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_inputFirstSliderStateChanged
-
+        
         float value = this.changeSliderValue(this.inputFirstSlider.getValue());
         this.inputFirstLabel.setText(String.valueOf(value));
         this.form.setInputOne(value);     // TODO add your handling code here:
@@ -279,11 +362,11 @@ public class UI extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenu2ActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        FileUtils.readDataBase();        // TODO add your handling code here:
+        this.showExamples();       // TODO add your handling code here:
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void inputSecondSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_inputSecondSliderStateChanged
-
+        
         float value = this.changeSliderValue(this.inputSecondSlider.getValue());
         this.inputSecondLabel.setText(String.valueOf(value));
         this.form.setInputSecond(value);
@@ -296,7 +379,7 @@ public class UI extends javax.swing.JFrame {
     }//GEN-LAST:event_inputThirdSliderStateChanged
 
     private void inputForthSliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_inputForthSliderStateChanged
-
+        
         float value = this.changeSliderValue(this.inputForthSlider.getValue());
         this.inputForthLabel.setText(String.valueOf(value));
         this.form.setInputForth(value);
@@ -304,7 +387,9 @@ public class UI extends javax.swing.JFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JScrollPane EjemplosPanel;
+    private javax.swing.JPanel ContentPanel;
+    private javax.swing.JPanel Examples;
+    private javax.swing.JScrollPane ExamplesPanel;
     private javax.swing.JPanel FormPanel;
     private javax.swing.JPanel GraphPanel;
     private javax.swing.JMenuBar Menu;
