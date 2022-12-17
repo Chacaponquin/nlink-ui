@@ -1,11 +1,11 @@
-package ui;
+package cu.edu.cujae.ceis.nlink.ui.views;
 
 import java.awt.GridLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import util.FileUtils;
-import util.FormData;
-import util.TrainerData;
+import cu.edu.cujae.ceis.nlink.ui.utilities.FileUtils;
+import cu.edu.cujae.ceis.nlink.ui.utilities.FormData;
+import cu.edu.cujae.ceis.nlink.ui.utilities.TrainerData;
 
 /**
  *
@@ -120,7 +120,6 @@ public class UI extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("NLink");
-        setPreferredSize(new java.awt.Dimension(1280, 700));
         setSize(new java.awt.Dimension(1280, 700));
 
         FormPanel.setBackground(new java.awt.Color(204, 204, 204));

@@ -2,12 +2,17 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package ui;
+package cu.edu.cujae.ceis.nlink.ui.views;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu.Separator;
+import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 
 /**
@@ -38,6 +43,12 @@ public class MainWindow extends javax.swing.JFrame
 
         jMenuBar1 = new JMenuBar();
         jMenu1 = new JMenu();
+        jMenuItem1 = new JMenuItem();
+        jMenuItem2 = new JMenuItem();
+        jSeparator1 = new Separator();
+        jMenuItem3 = new JMenuItem();
+        jSeparator2 = new Separator();
+        jMenuItem4 = new JMenuItem();
         jMenu2 = new JMenu();
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -46,6 +57,38 @@ public class MainWindow extends javax.swing.JFrame
 
         jMenu1.setText("File");
         jMenu1.setName("jMenu1"); // NOI18N
+
+        jMenuItem1.setText("Cargar base de datos");
+        jMenuItem1.setName("jMenuItem1"); // NOI18N
+        jMenu1.add(jMenuItem1);
+
+        jMenuItem2.setIcon(UIManager.getIcon("FileView.directoryIcon")
+        );
+        jMenuItem2.setText("Seleccionar base de datos de entrenamiento");
+        jMenuItem2.setName("jMenuItem2"); // NOI18N
+        jMenu1.add(jMenuItem2);
+
+        jSeparator1.setName("jSeparator1"); // NOI18N
+        jMenu1.add(jSeparator1);
+
+        jMenuItem3.setText("Opciones");
+        jMenuItem3.setName("jMenuItem3"); // NOI18N
+        jMenu1.add(jMenuItem3);
+
+        jSeparator2.setName("jSeparator2"); // NOI18N
+        jMenu1.add(jSeparator2);
+
+        jMenuItem4.setText("Salir");
+        jMenuItem4.setName("jMenuItem4"); // NOI18N
+        jMenuItem4.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent evt)
+            {
+                jMenuItem4ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem4);
+
         jMenuBar1.add(jMenu1);
 
         jMenu2.setText("Edit");
@@ -57,14 +100,21 @@ public class MainWindow extends javax.swing.JFrame
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGap(0, 800, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(layout.createParallelGroup(Alignment.LEADING)
-            .addGap(0, 277, Short.MAX_VALUE)
+            .addGap(0, 577, Short.MAX_VALUE)
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jMenuItem4ActionPerformed(ActionEvent evt)//GEN-FIRST:event_jMenuItem4ActionPerformed
+    {//GEN-HEADEREND:event_jMenuItem4ActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_jMenuItem4ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -119,5 +169,11 @@ public class MainWindow extends javax.swing.JFrame
     private JMenu jMenu1;
     private JMenu jMenu2;
     private JMenuBar jMenuBar1;
+    private JMenuItem jMenuItem1;
+    private JMenuItem jMenuItem2;
+    private JMenuItem jMenuItem3;
+    private JMenuItem jMenuItem4;
+    private Separator jSeparator1;
+    private Separator jSeparator2;
     // End of variables declaration//GEN-END:variables
 }
