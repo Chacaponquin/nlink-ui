@@ -4,8 +4,8 @@
  */
 package util;
 
-import java.io.File;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
@@ -13,64 +13,82 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
+import static java.lang.Float.parseFloat;
 
 /**
  *
  * @author Hector Angel Gomez
  */
-public class FileUtils {
+public class FileUtils
+{
+
     public static ArrayList<TrainerData> allData = new ArrayList();
-    
-    public static void printAllData(){
-        for(TrainerData d:FileUtils.allData){
+
+    public static void printAllData()
+    {
+        for (TrainerData d : FileUtils.allData)
+        {
             d.printData();
         }
     }
-    
-    public static void readDataBase(){   
+
+    public static void readDataBase()
+    {
         FileUtils.allData = new ArrayList();
         Path rootDir = Paths.get(".").normalize().toAbsolutePath();
         File file = new File(rootDir.toString() + "/src/data/" + "bezdekIris.data");
-        
-        if (file.exists()) {
-        try {
-            Reader input = new FileReader(file);
-           
-            BufferedReader br = new BufferedReader(input);
-            String line = br.readLine();
-            while (line != null && !line.equals("")) {       
-                String[] values = line.split(",");
-                
-                float val1 = 0;
-                float val2 = 0;
-                float val3 = 0;
-                float val4 = 0;
-                String result = "";
-                
-                for(int i = 0; i < values.length; i++){
-                    if(!values[i].equals("")){
-                    switch(i){
-                        case 0 -> val1 = Float.parseFloat(values[i]);
-                        case 1 -> val2 = Float.parseFloat(values[i]);
-                        case 2 -> val3 = Float.parseFloat(values[i]);
-                        case 3 -> val4 = Float.parseFloat(values[i]);
-                        default -> result = values[i];
+
+        if (file.exists())
+        {
+            try
+            {
+                Reader input = new FileReader(file);
+
+                BufferedReader br = new BufferedReader(input);
+                String line = br.readLine();
+                while (line != null && !line.equals(""))
+                {
+                    String[] values = line.split(",");
+
+                    float val1 = 0;
+                    float val2 = 0;
+                    float val3 = 0;
+                    float val4 = 0;
+                    String result = "";
+
+                    for (int i = 0; i < values.length; i++)
+                    {
+                        if (!values[i].equals(""))
+                        {
+                            switch (i)
+                            {
+                                case 0: val1 = parseFloat(values[i]);
+                                    break;
+                                case 1: val2 = Float.parseFloat(values[i]);
+                                    break;
+                                case 2: val3 = Float.parseFloat(values[i]);
+                                    break;
+                                case 3: val4 = Float.parseFloat(values[i]);
+                                    break;
+                                default: result = values[i];
+                            }
+                        }
                     }
-                    }
+
+                    TrainerData data = new TrainerData(val1, val2, val3, val4, result);
+                    FileUtils.allData.add(data);
+
+                    line = br.readLine();
                 }
-                
-                TrainerData data = new TrainerData(val1, val2, val3, val4, result);
-                FileUtils.allData.add(data);
-                
-                line = br.readLine();
+                // Closes the reader
+                input.close();
             }
-            // Closes the reader
-            input.close();
-        }  catch (IOException e) {
-            System.out.println("Error leer archivo");
+            catch (IOException e)
+            {
+                System.out.println("Error leer archivo");
+            }
         }
-    }
-        
+
         FileUtils.printAllData();
     }
 }

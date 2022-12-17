@@ -1,8 +1,8 @@
 package ui;
 
 import java.awt.GridLayout;
-import javax.swing.JPanel;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import util.FileUtils;
 import util.FormData;
 import util.TrainerData;
@@ -92,7 +92,8 @@ public class UI extends javax.swing.JFrame {
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
         FormPanel = new javax.swing.JPanel();
         inputFirstSlider = new javax.swing.JSlider();
@@ -125,30 +126,38 @@ public class UI extends javax.swing.JFrame {
         FormPanel.setBackground(new java.awt.Color(204, 204, 204));
 
         inputFirstSlider.setValue(0);
-        inputFirstSlider.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+        inputFirstSlider.addChangeListener(new javax.swing.event.ChangeListener()
+        {
+            public void stateChanged(javax.swing.event.ChangeEvent evt)
+            {
                 inputFirstSliderStateChanged(evt);
             }
         });
 
         inputSecondSlider.setValue(0);
-        inputSecondSlider.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+        inputSecondSlider.addChangeListener(new javax.swing.event.ChangeListener()
+        {
+            public void stateChanged(javax.swing.event.ChangeEvent evt)
+            {
                 inputSecondSliderStateChanged(evt);
             }
         });
 
         inputThirdSlider.setValue(0);
-        inputThirdSlider.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+        inputThirdSlider.addChangeListener(new javax.swing.event.ChangeListener()
+        {
+            public void stateChanged(javax.swing.event.ChangeEvent evt)
+            {
                 inputThirdSliderStateChanged(evt);
             }
         });
 
         jButton1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jButton1.setLabel("Calcular");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jButton1.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jButton1ActionPerformed(evt);
             }
         });
@@ -166,8 +175,10 @@ public class UI extends javax.swing.JFrame {
         jLabel4.setText("Valor 4:");
 
         inputForthSlider.setValue(0);
-        inputForthSlider.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+        inputForthSlider.addChangeListener(new javax.swing.event.ChangeListener()
+        {
+            public void stateChanged(javax.swing.event.ChangeEvent evt)
+            {
                 inputForthSliderStateChanged(evt);
             }
         });
@@ -296,16 +307,20 @@ public class UI extends javax.swing.JFrame {
 
         jMenu2.setText("Opciones");
         jMenu2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jMenu2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jMenu2.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jMenu2ActionPerformed(evt);
             }
         });
 
         jMenuItem1.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         jMenuItem1.setText("Cargar BD");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jMenuItem1ActionPerformed(evt);
             }
         });
@@ -313,8 +328,10 @@ public class UI extends javax.swing.JFrame {
 
         jMenuItem2.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         jMenuItem2.setText("Probar Ejemplos");
-        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jMenuItem2ActionPerformed(evt);
             }
         });
