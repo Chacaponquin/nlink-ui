@@ -1,13 +1,16 @@
 package cu.edu.cujae.ceis.nlink.ui.launch;
 
 import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatArcDarkContrastIJTheme;
-import javax.swing.JOptionPane;
+import cu.edu.cujae.ceis.nlink.ui.io.ConfigurationManager;
+import cu.edu.cujae.ceis.nlink.ui.io.FileManager;
+import cu.edu.cujae.ceis.nlink.ui.utilities.Messages;
+import cu.edu.cujae.ceis.nlink.ui.views.MainWindow;
+import java.io.IOException;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import cu.edu.cujae.ceis.nlink.ui.views.MainWindow;
 
 /**
  *
@@ -26,13 +29,29 @@ public class Launcher
         }
         catch (UnsupportedLookAndFeelException ex)
         {
-            LOGGER.info("unsupported look and feel {}", ex);
-            JOptionPane.showMessageDialog(null, ex, ex.getClass().getSimpleName(), JOptionPane.ERROR_MESSAGE);
+            LOGGER.error("unsupported look and feel {}", ex);
+            Messages.showExceptionMessage(ex);
         }
 
         SwingUtilities.invokeLater(() -> 
         {
-            new MainWindow().setVisible(true);
+            FileManager fileManager = FileManager.getFileManager();
+            ConfigurationManager configurationManager;
+            try
+            {
+                configurationManager = ConfigurationManager.getConfigurationManager();
+            }
+            catch (IOException ex)
+            {
+                LOGGER.error("Imposible iniciar la aplicación, error {}", ex);
+                Messages.showExceptionMessage(ex);
+                
+                System.exit(1);
+                return;
+            }
+            
+            new MainWindow(fileManager, configurationManager).setVisible(true);
         });
     }
+   
 }

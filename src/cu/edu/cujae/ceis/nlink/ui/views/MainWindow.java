@@ -4,16 +4,15 @@
  */
 package cu.edu.cujae.ceis.nlink.ui.views;
 
+import cu.edu.cujae.ceis.nlink.ui.io.ConfigurationManager;
+import cu.edu.cujae.ceis.nlink.ui.io.FileManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.GroupLayout;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 import javax.swing.GroupLayout.Alignment;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu.Separator;
-import javax.swing.UIManager;
-import javax.swing.WindowConstants;
+import javax.swing.*;
 
 /**
  *
@@ -22,11 +21,20 @@ import javax.swing.WindowConstants;
 public class MainWindow extends javax.swing.JFrame
 {
 
+    private final ConfigurationManager configurationManager;
+    private final FileManager fileManager;
+
     /**
      * Creates new form MainWindow
+     *
+     * @param fileManager
+     * @param configurationManager
      */
-    public MainWindow()
+    public MainWindow(FileManager fileManager, ConfigurationManager configurationManager)
     {
+        this.fileManager = fileManager;
+        this.configurationManager = configurationManager;
+        
         initComponents();
     }
 
@@ -48,20 +56,24 @@ public class MainWindow extends javax.swing.JFrame
         jSeparator1 = new Separator();
         jMenuItem3 = new JMenuItem();
         jSeparator2 = new Separator();
+        jMenuItem5 = new JMenuItem();
         jMenuItem4 = new JMenuItem();
-        jMenu2 = new JMenu();
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         jMenuBar1.setName("jMenuBar1"); // NOI18N
 
-        jMenu1.setText("File");
+        jMenu1.setText("Archivo");
         jMenu1.setName("jMenu1"); // NOI18N
 
+        jMenuItem1.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, InputEvent.CTRL_DOWN_MASK));
+        jMenuItem1.setIcon(UIManager.getIcon("FileView.fileIcon")
+        );
         jMenuItem1.setText("Cargar base de datos");
         jMenuItem1.setName("jMenuItem1"); // NOI18N
         jMenu1.add(jMenuItem1);
 
+        jMenuItem2.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T, InputEvent.CTRL_DOWN_MASK));
         jMenuItem2.setIcon(UIManager.getIcon("FileView.directoryIcon")
         );
         jMenuItem2.setText("Seleccionar base de datos de entrenamiento");
@@ -71,6 +83,7 @@ public class MainWindow extends javax.swing.JFrame
         jSeparator1.setName("jSeparator1"); // NOI18N
         jMenu1.add(jSeparator1);
 
+        jMenuItem3.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK));
         jMenuItem3.setText("Opciones");
         jMenuItem3.setName("jMenuItem3"); // NOI18N
         jMenu1.add(jMenuItem3);
@@ -78,6 +91,21 @@ public class MainWindow extends javax.swing.JFrame
         jSeparator2.setName("jSeparator2"); // NOI18N
         jMenu1.add(jSeparator2);
 
+        jMenuItem5.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0));
+        jMenuItem5.setText("Acerca de NLink");
+        jMenuItem5.setName("jMenuItem5"); // NOI18N
+        jMenuItem5.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent evt)
+            {
+                jMenuItem5ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem5);
+
+        jMenuItem4.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, InputEvent.CTRL_DOWN_MASK));
+        jMenuItem4.setIcon(UIManager.getIcon("InternalFrame.closeIcon")
+        );
         jMenuItem4.setText("Salir");
         jMenuItem4.setName("jMenuItem4"); // NOI18N
         jMenuItem4.addActionListener(new ActionListener()
@@ -90,10 +118,6 @@ public class MainWindow extends javax.swing.JFrame
         jMenu1.add(jMenuItem4);
 
         jMenuBar1.add(jMenu1);
-
-        jMenu2.setText("Edit");
-        jMenu2.setName("jMenu2"); // NOI18N
-        jMenuBar1.add(jMenu2);
 
         setJMenuBar(jMenuBar1);
 
@@ -116,64 +140,37 @@ public class MainWindow extends javax.swing.JFrame
         this.dispose();
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[])
-    {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try
-        {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels())
-            {
-                if ("Nimbus".equals(info.getName()))
-                {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        }
-        catch (ClassNotFoundException ex)
-        {
-            java.util.logging.Logger.getLogger(MainWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        catch (InstantiationException ex)
-        {
-            java.util.logging.Logger.getLogger(MainWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        catch (IllegalAccessException ex)
-        {
-            java.util.logging.Logger.getLogger(MainWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        catch (javax.swing.UnsupportedLookAndFeelException ex)
-        {
-            java.util.logging.Logger.getLogger(MainWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable()
-        {
-            public void run()
-            {
-                new MainWindow().setVisible(true);
-            }
-        });
-    }
+    private void jMenuItem5ActionPerformed(ActionEvent evt)//GEN-FIRST:event_jMenuItem5ActionPerformed
+    {//GEN-HEADEREND:event_jMenuItem5ActionPerformed
+        // TODO add your handling code here:
+        new AboutDialog(this, false).setVisible(true);
+    }//GEN-LAST:event_jMenuItem5ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private JMenu jMenu1;
-    private JMenu jMenu2;
     private JMenuBar jMenuBar1;
     private JMenuItem jMenuItem1;
     private JMenuItem jMenuItem2;
     private JMenuItem jMenuItem3;
     private JMenuItem jMenuItem4;
+    private JMenuItem jMenuItem5;
     private Separator jSeparator1;
     private Separator jSeparator2;
     // End of variables declaration//GEN-END:variables
+
+    /**
+     * @return the configurationManager
+     */
+    public ConfigurationManager getConfigurationManager()
+    {
+        return configurationManager;
+    }
+
+    /**
+     * @return the fileManager
+     */
+    public FileManager getFileManager()
+    {
+        return fileManager;
+    }
 }
