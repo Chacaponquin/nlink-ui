@@ -22,5 +22,15 @@ package cu.edu.cujae.ceis.nlink.ui.io;
  */
 public interface ConfigurationKeys
 {
+    // UI
     public static final String LOOK_AND_FEEL = "ui.laf";
+    public static final String SHOW_EXIT_CONFIRMATION = "ui.show_exit_confirmation";
+    
+    // LOGIC
+    public static final String HIDDEN_LAYER_NEURON_COUNT = "nn.hidden_layer_count";
+    public static final String ETA_FACTOR = "nn.eta_learning_factor";
+    
+    // DATABASES
+    public static final String TRAINING_DATA_BASE = "io.training_database";
+    public static final String LOG_FOLDER_PATH = "io.log_folder";
 }

@@ -4,7 +4,6 @@
  */
 package cu.edu.cujae.ceis.nlink.ui.io;
 
-import cu.edu.cujae.ceis.nlink.core.NeuralNetwork;
 import java.io.File;
 
 /**
@@ -15,8 +14,9 @@ public class FileManager
 {
 
     public static final File APPLICATION_DIRECTORY = new File("nlink/data");
+    public static final File REPORT_DIRECTORY = new File(APPLICATION_DIRECTORY.getParentFile(), "logs");
     public static final File CONFIGURATION_FILE = new File(APPLICATION_DIRECTORY, "configuration.properties");
-    public static final File NEURAL_NETWORK_WEIGHTS = new File(APPLICATION_DIRECTORY, NeuralNetwork.getDatabaseFileNameForArchitecture(4, Integer.MAX_VALUE, 3));
+    public static final File NEURAL_NETWORK_WEIGHTS = new File(APPLICATION_DIRECTORY, "nlink-weights.db");
     public static final File NEURAL_NETWORK_DATABASE = new File(APPLICATION_DIRECTORY, "database.db");
 
     private static FileManager fileManager = null;
@@ -36,6 +36,10 @@ public class FileManager
         if (APPLICATION_DIRECTORY.exists() == false)
         {
             APPLICATION_DIRECTORY.mkdirs();
+        }
+        if (REPORT_DIRECTORY.exists() == false)
+        {
+            REPORT_DIRECTORY.mkdirs();
         }
     }
 

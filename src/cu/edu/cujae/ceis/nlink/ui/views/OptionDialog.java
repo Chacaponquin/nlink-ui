@@ -4,27 +4,53 @@
  */
 package cu.edu.cujae.ceis.nlink.ui.views;
 
-import javax.swing.GroupLayout;
+import cu.edu.cujae.ceis.nlink.ui.io.ConfigurationKeys;
+import cu.edu.cujae.ceis.nlink.ui.io.ConfigurationManager;
+import cu.edu.cujae.ceis.nlink.ui.io.FileManager;
+import cu.edu.cujae.ceis.nlink.ui.utilities.Messages;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.io.IOException;
 import javax.swing.GroupLayout.Alignment;
-import javax.swing.WindowConstants;
+import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.UIManager.LookAndFeelInfo;
+import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import org.apache.commons.configuration2.Configuration;
+import org.apache.commons.configuration2.ex.ConfigurationException;
 
 /**
  *
  * @author Javier Marrero
  */
-public class OptionDialog extends javax.swing.JDialog
+public class OptionDialog extends javax.swing.JDialog implements ConfigurationKeys
 {
+    
+    private ConfigurationManager configurationManager;
+    private Configuration configuration;
 
     /**
      * Creates new form OptionDialog
      *
      * @param parent
-     * @param modal
+     * @param configurationManager
      */
-    public OptionDialog(java.awt.Frame parent, boolean modal)
+    public OptionDialog(java.awt.Frame parent, ConfigurationManager configurationManager)
     {
-        super(parent, modal);
+        super(parent, true);
         initComponents();
+        
+        this.configurationManager = configurationManager;
+        this.configuration = configurationManager.getConfigurationObject();
+        
+        initStatus();
     }
 
     /**
@@ -38,82 +64,421 @@ public class OptionDialog extends javax.swing.JDialog
     private void initComponents()
     {
 
+        jPanel2 = new JPanel();
+        jPanel3 = new JPanel();
+        jLabel1 = new JLabel();
+        lafComboBox = new JComboBox<>();
+        exitConfirmationCheckBox = new JCheckBox();
+        warnLabel = new JLabel();
+        jPanel4 = new JPanel();
+        jLabel2 = new JLabel();
+        hiddenNeuronCountSlider = new JSpinner();
+        jLabel3 = new JLabel();
+        itaFactorSlider = new JSlider();
+        itaFactorLabel = new JLabel();
+        jLabel5 = new JLabel();
+        reportFolderPath = new JTextField();
+        jButton4 = new JButton();
+        jLabel6 = new JLabel();
+        databasePath = new JTextField();
+        jButton5 = new JButton();
+        jSeparator1 = new JSeparator();
+        jPanel1 = new JPanel();
+        jButton3 = new JButton();
+        jButton2 = new JButton();
+        jButton1 = new JButton();
+
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Opciones...");
+        setAlwaysOnTop(true);
+        setMinimumSize(new Dimension(600, 480));
+        setResizable(false);
+        getContentPane().setLayout(new BorderLayout(0, 2));
 
-        GroupLayout layout = new GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(layout.createParallelGroup(Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
-        );
+        jPanel2.setName("jPanel2"); // NOI18N
+        jPanel2.setPreferredSize(new Dimension(600, 440));
+        jPanel2.setLayout(new BoxLayout(jPanel2, BoxLayout.PAGE_AXIS));
 
-        pack();
-    }// </editor-fold>//GEN-END:initComponents
+        jPanel3.setBorder(BorderFactory.createTitledBorder("General"));
+        jPanel3.setMaximumSize(new Dimension(600, 90));
+        jPanel3.setMinimumSize(new Dimension(600, 90));
+        jPanel3.setName("jPanel3"); // NOI18N
+        jPanel3.setPreferredSize(new Dimension(600, 90));
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[])
-    {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try
+        jLabel1.setText("Look and feel:");
+        jLabel1.setName("jLabel1"); // NOI18N
+
+        lafComboBox.setName("lafComboBox"); // NOI18N
+        lafComboBox.addItemListener(new ItemListener()
         {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels())
+            public void itemStateChanged(ItemEvent evt)
             {
-                if ("Nimbus".equals(info.getName()))
-                {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        }
-        catch (ClassNotFoundException ex)
-        {
-            java.util.logging.Logger.getLogger(OptionDialog.class.getName()).log(java.util.logging.Level.SEVERE, null,
-                                                                                 ex);
-        }
-        catch (InstantiationException ex)
-        {
-            java.util.logging.Logger.getLogger(OptionDialog.class.getName()).log(java.util.logging.Level.SEVERE, null,
-                                                                                 ex);
-        }
-        catch (IllegalAccessException ex)
-        {
-            java.util.logging.Logger.getLogger(OptionDialog.class.getName()).log(java.util.logging.Level.SEVERE, null,
-                                                                                 ex);
-        }
-        catch (javax.swing.UnsupportedLookAndFeelException ex)
-        {
-            java.util.logging.Logger.getLogger(OptionDialog.class.getName()).log(java.util.logging.Level.SEVERE, null,
-                                                                                 ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable()
-        {
-            public void run()
-            {
-                OptionDialog dialog = new OptionDialog(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter()
-                {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e)
-                    {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
+                lafComboBoxItemStateChanged(evt);
             }
         });
+
+        exitConfirmationCheckBox.setText("Mostrar mensaje al salir");
+        exitConfirmationCheckBox.setName("exitConfirmationCheckBox"); // NOI18N
+
+        warnLabel.setIcon(UIManager.getIcon("OptionPane.warningIcon")
+        );
+        warnLabel.setText("Atención: los cambios en la apariencia requieren reiniciar la aplicación");
+        warnLabel.setEnabled(false);
+        warnLabel.setFocusable(false);
+        warnLabel.setName("warnLabel"); // NOI18N
+
+        GroupLayout jPanel3Layout = new GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(jPanel3Layout.createParallelGroup(Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jLabel1, GroupLayout.PREFERRED_SIZE, 130, GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(ComponentPlacement.UNRELATED)
+                        .addComponent(lafComboBox, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(exitConfirmationCheckBox)
+                        .addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(warnLabel)))
+                .addContainerGap())
+        );
+        jPanel3Layout.setVerticalGroup(jPanel3Layout.createParallelGroup(Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(lafComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
+                .addGroup(jPanel3Layout.createParallelGroup(Alignment.BASELINE)
+                    .addComponent(exitConfirmationCheckBox)
+                    .addComponent(warnLabel))
+                .addContainerGap())
+        );
+
+        jPanel2.add(jPanel3);
+
+        jPanel4.setBorder(BorderFactory.createTitledBorder("Parámetros de la red neuronal"));
+        jPanel4.setMaximumSize(new Dimension(600, 350));
+        jPanel4.setMinimumSize(new Dimension(600, 350));
+        jPanel4.setName("jPanel4"); // NOI18N
+        jPanel4.setPreferredSize(new Dimension(600, 350));
+
+        jLabel2.setText("Cantidad de neuronas de la capa intermedia:");
+        jLabel2.setName("jLabel2"); // NOI18N
+
+        hiddenNeuronCountSlider.setModel(new SpinnerNumberModel(128, 4, 32768, 1));
+        hiddenNeuronCountSlider.setName("hiddenNeuronCountSlider"); // NOI18N
+
+        jLabel3.setText("Factor de aprendizaje:");
+        jLabel3.setName("jLabel3"); // NOI18N
+
+        itaFactorSlider.setMajorTickSpacing(5);
+        itaFactorSlider.setPaintTicks(true);
+        itaFactorSlider.setSnapToTicks(true);
+        itaFactorSlider.setName("itaFactorSlider"); // NOI18N
+        itaFactorSlider.addChangeListener(new ChangeListener()
+        {
+            public void stateChanged(ChangeEvent evt)
+            {
+                itaFactorSliderStateChanged(evt);
+            }
+        });
+
+        itaFactorLabel.setMaximumSize(new Dimension(0, 28));
+        itaFactorLabel.setMinimumSize(new Dimension(0, 28));
+        itaFactorLabel.setName("itaFactorLabel"); // NOI18N
+        itaFactorLabel.setPreferredSize(new Dimension(0, 20));
+
+        jLabel5.setText("Carpeta por defecto para logging:");
+        jLabel5.setName("jLabel5"); // NOI18N
+
+        reportFolderPath.setName("reportFolderPath"); // NOI18N
+
+        jButton4.setIcon(UIManager.getIcon("FileView.directoryIcon")
+        );
+        jButton4.setName("jButton4"); // NOI18N
+        jButton4.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent evt)
+            {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
+        jLabel6.setText("Base de datos de entrenamiento:");
+        jLabel6.setName("jLabel6"); // NOI18N
+
+        databasePath.setName("databasePath"); // NOI18N
+
+        jButton5.setIcon(UIManager.getIcon("FileView.directoryIcon"));
+        jButton5.setName("jButton5"); // NOI18N
+        jButton5.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent evt)
+            {
+                jButton5ActionPerformed(evt);
+            }
+        });
+
+        jSeparator1.setName("jSeparator1"); // NOI18N
+
+        GroupLayout jPanel4Layout = new GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(jPanel4Layout.createParallelGroup(Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel4Layout.createParallelGroup(Alignment.LEADING)
+                    .addComponent(jSeparator1)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGroup(jPanel4Layout.createParallelGroup(Alignment.TRAILING, false)
+                            .addComponent(jLabel3, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel2, GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE))
+                        .addPreferredGap(ComponentPlacement.RELATED)
+                        .addGroup(jPanel4Layout.createParallelGroup(Alignment.LEADING)
+                            .addComponent(hiddenNeuronCountSlider)
+                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addComponent(itaFactorSlider, GroupLayout.DEFAULT_SIZE, 256, Short.MAX_VALUE)
+                                .addPreferredGap(ComponentPlacement.RELATED)
+                                .addComponent(itaFactorLabel, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGroup(jPanel4Layout.createParallelGroup(Alignment.TRAILING, false)
+                            .addComponent(jLabel6, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel5, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(ComponentPlacement.RELATED)
+                        .addGroup(jPanel4Layout.createParallelGroup(Alignment.TRAILING)
+                            .addComponent(databasePath, Alignment.LEADING)
+                            .addComponent(reportFolderPath))
+                        .addPreferredGap(ComponentPlacement.RELATED)
+                        .addGroup(jPanel4Layout.createParallelGroup(Alignment.LEADING, false)
+                            .addComponent(jButton4, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton5, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap())
+        );
+        jPanel4Layout.setVerticalGroup(jPanel4Layout.createParallelGroup(Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel4Layout.createParallelGroup(Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(hiddenNeuronCountSlider, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(ComponentPlacement.RELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(Alignment.LEADING)
+                    .addComponent(itaFactorLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(jLabel3, GroupLayout.DEFAULT_SIZE, 27, Short.MAX_VALUE)
+                        .addGap(19, 19, 19))
+                    .addComponent(itaFactorSlider, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                .addGap(3, 3, 3)
+                .addComponent(jSeparator1, GroupLayout.PREFERRED_SIZE, 10, GroupLayout.PREFERRED_SIZE)
+                .addGap(5, 5, 5)
+                .addGroup(jPanel4Layout.createParallelGroup(Alignment.LEADING)
+                    .addComponent(jLabel5)
+                    .addGroup(jPanel4Layout.createParallelGroup(Alignment.BASELINE)
+                        .addComponent(reportFolderPath, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButton4, GroupLayout.PREFERRED_SIZE, 22, GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(ComponentPlacement.UNRELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(Alignment.LEADING)
+                    .addGroup(jPanel4Layout.createParallelGroup(Alignment.BASELINE)
+                        .addComponent(jLabel6)
+                        .addComponent(databasePath, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jButton5, GroupLayout.PREFERRED_SIZE, 22, GroupLayout.PREFERRED_SIZE))
+                .addGap(173, 173, 173))
+        );
+
+        jPanel2.add(jPanel4);
+
+        getContentPane().add(jPanel2, BorderLayout.PAGE_START);
+
+        jPanel1.setMaximumSize(new Dimension(600, 35));
+        jPanel1.setMinimumSize(new Dimension(600, 35));
+        jPanel1.setName("jPanel1"); // NOI18N
+        jPanel1.setPreferredSize(new Dimension(600, 35));
+        jPanel1.setLayout(new FlowLayout(FlowLayout.RIGHT));
+
+        jButton3.setText("Por defecto");
+        jButton3.setName("jButton3"); // NOI18N
+        jButton3.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent evt)
+            {
+                jButton3ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButton3);
+
+        jButton2.setText("Aceptar");
+        jButton2.setName("jButton2"); // NOI18N
+        jButton2.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent evt)
+            {
+                jButton2ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButton2);
+
+        jButton1.setText("Cancelar");
+        jButton1.setName("jButton1"); // NOI18N
+        jButton1.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent evt)
+            {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButton1);
+
+        getContentPane().add(jPanel1, BorderLayout.CENTER);
+
+        pack();
+        setLocationRelativeTo(null);
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void initStatus()
+    {
+        for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels())
+        {
+            lafComboBox.addItem(info.getName());
+            if (UIManager.getLookAndFeel().getName().equals(info.getName()))
+            {
+                lafComboBox.setSelectedItem(info.getName());
+            }
+        }
+
+        // exit confirmation combobox
+        exitConfirmationCheckBox.setSelected(configuration.getBoolean(ConfigurationKeys.SHOW_EXIT_CONFIRMATION));
+
+        // Network data
+        itaFactorSlider.setValue((int) (configuration.getFloat(ETA_FACTOR) * 100.0f));
+        itaFactorLabel.setText(String.format("%3d%%", itaFactorSlider.getValue()));
+        
+        hiddenNeuronCountSlider.setValue(configuration.getInt(HIDDEN_LAYER_NEURON_COUNT));
+        
+        databasePath.setText(configuration.getString(TRAINING_DATA_BASE));
+        reportFolderPath.setText(configuration.getString(LOG_FOLDER_PATH));
     }
 
+    private void jButton1ActionPerformed(ActionEvent evt)//GEN-FIRST:event_jButton1ActionPerformed
+    {//GEN-HEADEREND:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(ActionEvent evt)//GEN-FIRST:event_jButton2ActionPerformed
+    {//GEN-HEADEREND:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        snapShot();
+        dispose();
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(ActionEvent evt)//GEN-FIRST:event_jButton3ActionPerformed
+    {//GEN-HEADEREND:event_jButton3ActionPerformed
+        configurationManager.loadDefaults();
+        initStatus();
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void itaFactorSliderStateChanged(ChangeEvent evt)//GEN-FIRST:event_itaFactorSliderStateChanged
+    {//GEN-HEADEREND:event_itaFactorSliderStateChanged
+        int value = itaFactorSlider.getValue();
+        itaFactorLabel.setText(String.format("%3d%%", value));
+    }//GEN-LAST:event_itaFactorSliderStateChanged
+
+    private void jButton4ActionPerformed(ActionEvent evt)//GEN-FIRST:event_jButton4ActionPerformed
+    {//GEN-HEADEREND:event_jButton4ActionPerformed
+        JFileChooser fileChooser = new JFileChooser(FileManager.APPLICATION_DIRECTORY);
+        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        
+        int returnVal = fileChooser.showOpenDialog(this);
+        if (returnVal == JFileChooser.APPROVE_OPTION)
+        {
+            this.reportFolderPath.setText(fileChooser.getSelectedFile().getAbsolutePath());
+        }
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton5ActionPerformed(ActionEvent evt)//GEN-FIRST:event_jButton5ActionPerformed
+    {//GEN-HEADEREND:event_jButton5ActionPerformed
+        // TODO add your handling code here:
+        JFileChooser fileChooser = new JFileChooser(FileManager.APPLICATION_DIRECTORY);
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Archivos de base de datos", "data");
+        fileChooser.addChoosableFileFilter(filter);
+        fileChooser.setFileFilter(filter);
+        
+        int returnVal = fileChooser.showOpenDialog(this);
+        if (returnVal == JFileChooser.APPROVE_OPTION)
+        {
+            this.databasePath.setText(fileChooser.getSelectedFile().getAbsolutePath());
+        }
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void lafComboBoxItemStateChanged(ItemEvent evt)//GEN-FIRST:event_lafComboBoxItemStateChanged
+    {//GEN-HEADEREND:event_lafComboBoxItemStateChanged
+        if (lafComboBox.getSelectedItem().equals(configuration.getString(LOOK_AND_FEEL)) == false)
+        {
+            warnLabel.setEnabled(true);
+        }
+        else
+        {
+            warnLabel.setEnabled(false);
+        }
+    }//GEN-LAST:event_lafComboBoxItemStateChanged
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private JTextField databasePath;
+    private JCheckBox exitConfirmationCheckBox;
+    private JSpinner hiddenNeuronCountSlider;
+    private JLabel itaFactorLabel;
+    private JSlider itaFactorSlider;
+    private JButton jButton1;
+    private JButton jButton2;
+    private JButton jButton3;
+    private JButton jButton4;
+    private JButton jButton5;
+    private JLabel jLabel1;
+    private JLabel jLabel2;
+    private JLabel jLabel3;
+    private JLabel jLabel5;
+    private JLabel jLabel6;
+    private JPanel jPanel1;
+    private JPanel jPanel2;
+    private JPanel jPanel3;
+    private JPanel jPanel4;
+    private JSeparator jSeparator1;
+    private JComboBox<String> lafComboBox;
+    private JTextField reportFolderPath;
+    private JLabel warnLabel;
     // End of variables declaration//GEN-END:variables
+
+    private void snapShot()
+    {
+        configuration.setProperty(ETA_FACTOR, itaFactorSlider.getValue() / 100.0f);
+        configuration.setProperty(HIDDEN_LAYER_NEURON_COUNT, hiddenNeuronCountSlider.getValue());
+        configuration.setProperty(LOG_FOLDER_PATH, reportFolderPath.getText());
+        configuration.setProperty(LOOK_AND_FEEL, findLookAndFeelByName((String) lafComboBox.getSelectedItem()));
+        configuration.setProperty(SHOW_EXIT_CONFIRMATION, exitConfirmationCheckBox.isSelected());
+        configuration.setProperty(TRAINING_DATA_BASE, databasePath.getText());
+        
+        try
+        {
+            // Attempt to write
+            configurationManager.saveConfiguration();
+        }
+        catch (IOException | ConfigurationException ex)
+        {
+            Messages.showExceptionMessage(ex);
+        }
+    }
+    
+    private String findLookAndFeelByName(String name)
+    {
+        String result = UIManager.getSystemLookAndFeelClassName();
+        for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels())
+        {
+            if (info.getName().equals(lafComboBox.getSelectedItem()))
+            {
+                return info.getClassName();
+            }
+        }
+        return result;
+    }
 }

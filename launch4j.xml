@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch4jConfig>
+  <dontWrapJar>false</dontWrapJar>
+  <headerType>gui</headerType>
+  <jar>D:\Workspace\nlink-ui\dist\nlink-ui.jar</jar>
+  <outfile>D:\Workspace\nlink-ui\dist\NLink.exe</outfile>
+  <errTitle></errTitle>
+  <cmdLine></cmdLine>
+  <chdir>.</chdir>
+  <priority>normal</priority>
+  <downloadUrl>http://java.com/download</downloadUrl>
+  <supportUrl></supportUrl>
+  <stayAlive>false</stayAlive>
+  <restartOnCrash>false</restartOnCrash>
+  <manifest></manifest>
+  <icon></icon>
+  <jre>
+    <path></path>
+    <bundledJre64Bit>false</bundledJre64Bit>
+    <bundledJreAsFallback>false</bundledJreAsFallback>
+    <minVersion>1.8</minVersion>
+    <maxVersion></maxVersion>
+    <jdkPreference>preferJre</jdkPreference>
+    <runtimeBits>64/32</runtimeBits>
+  </jre>
+  <versionInfo>
+    <fileVersion>0.99.6.6152</fileVersion>
+    <txtFileVersion>0.99.6-rc1</txtFileVersion>
+    <fileDescription>NLink Neural Artificial Network</fileDescription>
+    <copyright>2022, CUJAE</copyright>
+    <productVersion>0.99.6.0</productVersion>
+    <txtProductVersion>0.99.6-rc1</txtProductVersion>
+    <productName>NLink</productName>
+    <companyName>CUJAE</companyName>
+    <internalName>NLink</internalName>
+    <originalFilename>nlink-ui.exe</originalFilename>
+    <trademarks></trademarks>
+    <language>ENGLISH_US</language>
+  </versionInfo>
+</launch4jConfig>

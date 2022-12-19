@@ -4,38 +4,130 @@
  */
 package cu.edu.cujae.ceis.nlink.ui.views;
 
+import cu.edu.cujae.ceis.nlink.mvc.ApplicationController;
+import cu.edu.cujae.ceis.nlink.mvc.EvaluationResult;
+import cu.edu.cujae.ceis.nlink.ui.io.ConfigurationKeys;
 import cu.edu.cujae.ceis.nlink.ui.io.ConfigurationManager;
 import cu.edu.cujae.ceis.nlink.ui.io.FileManager;
+import cu.edu.cujae.ceis.nlink.ui.utilities.Messages;
+import cu.edu.cujae.ceis.nlink.ui.views.dockables.ClassificationSetView;
+import cu.edu.cujae.ceis.nlink.ui.views.dockables.CloseableView;
+import cu.edu.cujae.ceis.nlink.ui.views.dockables.TrainingSetView;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
-import javax.swing.GroupLayout.Alignment;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.IOException;
+import java.util.Iterator;
+import java.util.UUID;
 import javax.swing.JPopupMenu.Separator;
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.DefaultTableModel;
+import org.apache.commons.configuration2.Configuration;
+import org.apache.commons.configuration2.ex.ConfigurationException;
+import org.flexdock.docking.DockingConstants;
+import org.flexdock.docking.DockingPort;
+import org.flexdock.view.Viewport;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author Javier Marrero
  */
+@SuppressWarnings ("serial")
 public class MainWindow extends javax.swing.JFrame
 {
 
+    /**
+     * @return the classificationSetView
+     */
+    public ClassificationSetView getClassificationSetView()
+    {
+        return classificationSetView;
+    }
+
+    /**
+     * @return the configuration
+     */
+    public Configuration getConfiguration()
+    {
+        return configuration;
+    }
+
+    /**
+     * @return the controller
+     */
+    public ApplicationController getController()
+    {
+        return controller;
+    }
+
+    /**
+     * @return the dockingPort
+     */
+    public Viewport getDockingPort()
+    {
+        return dockingPort;
+    }
+
+    /**
+     * @return the trainingSetView
+     */
+    public TrainingSetView getTrainingSetView()
+    {
+        return trainingSetView;
+    }
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(MainWindow.class);
+
     private final ConfigurationManager configurationManager;
+    private final Configuration configuration;
     private final FileManager fileManager;
+    private final ApplicationController controller;
+    private CloseableView firstDocked;
+
+    private TrainingSetView trainingSetView;
+    private ClassificationSetView classificationSetView;
 
     /**
      * Creates new form MainWindow
      *
-     * @param fileManager
-     * @param configurationManager
+     * @param controller
      */
-    public MainWindow(FileManager fileManager, ConfigurationManager configurationManager)
+    public MainWindow(ApplicationController controller)
     {
-        this.fileManager = fileManager;
-        this.configurationManager = configurationManager;
-        
+        this.controller = controller;
+        this.fileManager = controller.getFileManager();
+        this.configurationManager = controller.getConfigurationManager();
+        this.configuration = configurationManager.getConfigurationObject();
+
+        initAdditionalStatus();
         initComponents();
+
+        initializeDockables();
+
+        // Dock
+        dock(trainingSetView, DockingConstants.CENTER_REGION, 1.0f);
+        dock(classificationSetView, DockingConstants.SOUTH_REGION, 0.35f);
+    }
+
+    private void initializeDockables()
+    {
+        // Create the views
+        trainingSetView = new TrainingSetView();
+        classificationSetView = new ClassificationSetView(controller);
+    }
+
+    private void initAdditionalStatus()
+    {
+        this.controller.setToplevel(this);
     }
 
     /**
@@ -49,6 +141,7 @@ public class MainWindow extends javax.swing.JFrame
     private void initComponents()
     {
 
+        dockingPort = new Viewport();
         jMenuBar1 = new JMenuBar();
         jMenu1 = new JMenu();
         jMenuItem1 = new JMenuItem();
@@ -58,8 +151,27 @@ public class MainWindow extends javax.swing.JFrame
         jSeparator2 = new Separator();
         jMenuItem5 = new JMenuItem();
         jMenuItem4 = new JMenuItem();
+        jMenu2 = new JMenu();
+        jMenuItem6 = new JMenuItem();
+        jMenuItem7 = new JMenuItem();
+        jSeparator3 = new Separator();
+        jMenuItem8 = new JMenuItem();
+        jMenuItem9 = new JMenuItem();
 
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("NLink");
+        setMinimumSize(new Dimension(800, 600));
+        setPreferredSize(new Dimension(1024, 768));
+        addWindowListener(new WindowAdapter()
+        {
+            public void windowClosing(WindowEvent evt)
+            {
+                formWindowClosing(evt);
+            }
+        });
+
+        dockingPort.setName("dockingPort"); // NOI18N
+        getContentPane().add(dockingPort, BorderLayout.CENTER);
 
         jMenuBar1.setName("jMenuBar1"); // NOI18N
 
@@ -71,6 +183,13 @@ public class MainWindow extends javax.swing.JFrame
         );
         jMenuItem1.setText("Cargar base de datos");
         jMenuItem1.setName("jMenuItem1"); // NOI18N
+        jMenuItem1.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent evt)
+            {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
         jMenu1.add(jMenuItem1);
 
         jMenuItem2.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T, InputEvent.CTRL_DOWN_MASK));
@@ -78,6 +197,13 @@ public class MainWindow extends javax.swing.JFrame
         );
         jMenuItem2.setText("Seleccionar base de datos de entrenamiento");
         jMenuItem2.setName("jMenuItem2"); // NOI18N
+        jMenuItem2.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent evt)
+            {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
         jMenu1.add(jMenuItem2);
 
         jSeparator1.setName("jSeparator1"); // NOI18N
@@ -86,6 +212,13 @@ public class MainWindow extends javax.swing.JFrame
         jMenuItem3.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK));
         jMenuItem3.setText("Opciones");
         jMenuItem3.setName("jMenuItem3"); // NOI18N
+        jMenuItem3.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent evt)
+            {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
         jMenu1.add(jMenuItem3);
 
         jSeparator2.setName("jSeparator2"); // NOI18N
@@ -119,16 +252,63 @@ public class MainWindow extends javax.swing.JFrame
 
         jMenuBar1.add(jMenu1);
 
-        setJMenuBar(jMenuBar1);
+        jMenu2.setText("Red");
+        jMenu2.setName("jMenu2"); // NOI18N
 
-        GroupLayout layout = new GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING)
-            .addGap(0, 800, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(layout.createParallelGroup(Alignment.LEADING)
-            .addGap(0, 577, Short.MAX_VALUE)
-        );
+        jMenuItem6.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.SHIFT_DOWN_MASK | InputEvent.CTRL_DOWN_MASK));
+        jMenuItem6.setText("Nueva instancia");
+        jMenuItem6.setName("jMenuItem6"); // NOI18N
+        jMenuItem6.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent evt)
+            {
+                jMenuItem6ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem6);
+
+        jMenuItem7.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T, InputEvent.SHIFT_DOWN_MASK | InputEvent.CTRL_DOWN_MASK));
+        jMenuItem7.setText("Entrenar");
+        jMenuItem7.setName("jMenuItem7"); // NOI18N
+        jMenuItem7.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent evt)
+            {
+                jMenuItem7ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem7);
+
+        jSeparator3.setName("jSeparator3"); // NOI18N
+        jMenu2.add(jSeparator3);
+
+        jMenuItem8.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
+        jMenuItem8.setText("Guardar");
+        jMenuItem8.setName("jMenuItem8"); // NOI18N
+        jMenuItem8.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent evt)
+            {
+                jMenuItem8ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem8);
+
+        jMenuItem9.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0));
+        jMenuItem9.setText("Clasificar");
+        jMenuItem9.setName("jMenuItem9"); // NOI18N
+        jMenuItem9.addActionListener(new ActionListener()
+        {
+            public void actionPerformed(ActionEvent evt)
+            {
+                jMenuItem9ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem9);
+
+        jMenuBar1.add(jMenu2);
+
+        setJMenuBar(jMenuBar1);
 
         pack();
         setLocationRelativeTo(null);
@@ -136,8 +316,19 @@ public class MainWindow extends javax.swing.JFrame
 
     private void jMenuItem4ActionPerformed(ActionEvent evt)//GEN-FIRST:event_jMenuItem4ActionPerformed
     {//GEN-HEADEREND:event_jMenuItem4ActionPerformed
-        // TODO add your handling code here:
-        this.dispose();
+        if (configuration.getBoolean(ConfigurationManager.SHOW_EXIT_CONFIRMATION))
+        {
+            int result = JOptionPane.showConfirmDialog(this, "Está seguro de que desea salir?", "Salir?",
+                                                       JOptionPane.YES_NO_OPTION);
+            if (result == JOptionPane.YES_OPTION)
+            {
+                this.dispose();
+            }
+        }
+        else
+        {
+            this.dispose();
+        }
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
     private void jMenuItem5ActionPerformed(ActionEvent evt)//GEN-FIRST:event_jMenuItem5ActionPerformed
@@ -146,16 +337,139 @@ public class MainWindow extends javax.swing.JFrame
         new AboutDialog(this, false).setVisible(true);
     }//GEN-LAST:event_jMenuItem5ActionPerformed
 
+    private void jMenuItem3ActionPerformed(ActionEvent evt)//GEN-FIRST:event_jMenuItem3ActionPerformed
+    {//GEN-HEADEREND:event_jMenuItem3ActionPerformed
+        // TODO add your handling code here:
+        new OptionDialog(this, configurationManager).setVisible(true);
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
+
+    private void jMenuItem6ActionPerformed(ActionEvent evt)//GEN-FIRST:event_jMenuItem6ActionPerformed
+    {//GEN-HEADEREND:event_jMenuItem6ActionPerformed
+        // TODO add your handling code here:
+        new ForwardPassDialog(this, true, controller).setVisible(true);
+    }//GEN-LAST:event_jMenuItem6ActionPerformed
+
+    private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jMenuItem7ActionPerformed
+    {//GEN-HEADEREND:event_jMenuItem7ActionPerformed
+        // TODO add your handling code here:
+        new TrainingSettingsDialog(this, true, controller).setVisible(true);
+    }//GEN-LAST:event_jMenuItem7ActionPerformed
+
+    private void jMenuItem1ActionPerformed(ActionEvent evt)//GEN-FIRST:event_jMenuItem1ActionPerformed
+    {//GEN-HEADEREND:event_jMenuItem1ActionPerformed
+        JFileChooser chooser = new JFileChooser(FileManager.REPORT_DIRECTORY);
+        FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                "Archivos de base de datos", "data", "csv");
+        chooser.setFileFilter(filter);
+        chooser.addChoosableFileFilter(filter);
+
+        int returnVal = chooser.showOpenDialog(this);
+        if (returnVal == JFileChooser.APPROVE_OPTION)
+        {
+            try
+            {
+                controller.loadRegularInstances(chooser.getSelectedFile());
+            }
+            catch (IOException ex)
+            {
+                LOGGER.error("Imposible cargar la base de datos", ex);
+                Messages.showExceptionMessage(ex);
+            }
+        }
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void jMenuItem2ActionPerformed(ActionEvent evt)//GEN-FIRST:event_jMenuItem2ActionPerformed
+    {//GEN-HEADEREND:event_jMenuItem2ActionPerformed
+        JFileChooser chooser = new JFileChooser(FileManager.APPLICATION_DIRECTORY.getParentFile());
+        FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                "Archivos de base de datos", "data", "csv");
+        chooser.setFileFilter(filter);
+        chooser.addChoosableFileFilter(filter);
+        chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+
+        int returnVal = chooser.showOpenDialog(this);
+        if (returnVal == JFileChooser.APPROVE_OPTION)
+        {
+            configuration.setProperty(ConfigurationKeys.TRAINING_DATA_BASE, chooser.getSelectedFile().getAbsolutePath());
+
+            try
+            {
+                controller.loadDefaultDataBase();
+            }
+            catch (IOException ex)
+            {
+                LOGGER.error("Fallo al cargar la base de datos de entrenamiento", ex);
+                Messages.showExceptionMessage(ex);
+            }
+        }
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void formWindowClosing(WindowEvent evt)//GEN-FIRST:event_formWindowClosing
+    {//GEN-HEADEREND:event_formWindowClosing
+        try
+        {
+            configurationManager.saveConfiguration();
+            controller.saveNeuralNetwork();
+        }
+        catch (IOException | ConfigurationException ex)
+        {
+            Messages.showExceptionMessage(ex);
+            LOGGER.error("fatal exception on save.", ex);
+        }
+    }//GEN-LAST:event_formWindowClosing
+
+    private void jMenuItem8ActionPerformed(ActionEvent evt)//GEN-FIRST:event_jMenuItem8ActionPerformed
+    {//GEN-HEADEREND:event_jMenuItem8ActionPerformed
+        JFileChooser chooser = new JFileChooser(FileManager.REPORT_DIRECTORY);
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Archivos de base de datos", ".data", ".db",
+                                                                     ".names");
+
+        chooser.addChoosableFileFilter(filter);
+        chooser.setFileFilter(filter);
+
+        int option = chooser.showSaveDialog(this);
+        if (option == JFileChooser.APPROVE_OPTION)
+        {
+            try
+            {
+                File selectedFile = chooser.getSelectedFile();
+                if (selectedFile.exists() == false)
+                {
+                    selectedFile.createNewFile();
+                }
+                
+                controller.saveRegularInstances(selectedFile);
+            }
+            catch (IOException ex)
+            {
+                LOGGER.error("no pudo salvar la base de datos.", ex);
+                Messages.showExceptionMessage(ex);
+            }
+        }
+    }//GEN-LAST:event_jMenuItem8ActionPerformed
+
+    private void jMenuItem9ActionPerformed(ActionEvent evt)//GEN-FIRST:event_jMenuItem9ActionPerformed
+    {//GEN-HEADEREND:event_jMenuItem9ActionPerformed
+        controller.reclassifyAllRegularInstances();
+    }//GEN-LAST:event_jMenuItem9ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private Viewport dockingPort;
     private JMenu jMenu1;
+    private JMenu jMenu2;
     private JMenuBar jMenuBar1;
     private JMenuItem jMenuItem1;
     private JMenuItem jMenuItem2;
     private JMenuItem jMenuItem3;
     private JMenuItem jMenuItem4;
     private JMenuItem jMenuItem5;
+    private JMenuItem jMenuItem6;
+    private JMenuItem jMenuItem7;
+    private JMenuItem jMenuItem8;
+    private JMenuItem jMenuItem9;
     private Separator jSeparator1;
     private Separator jSeparator2;
+    private Separator jSeparator3;
     // End of variables declaration//GEN-END:variables
 
     /**
@@ -172,5 +486,69 @@ public class MainWindow extends javax.swing.JFrame
     public FileManager getFileManager()
     {
         return fileManager;
+    }
+
+    /**
+     * @return the instancesTable
+     */
+    public JTable getInstancesTable()
+    {
+        return trainingSetView.getInstancesTable();
+    }
+
+    public void addInstanceToTrainingSetsTable(UUID uuid, float[] inputs, EvaluationResult expected,
+                                               EvaluationResult value,
+                                               boolean correct)
+    {
+        DefaultTableModel model = (DefaultTableModel) getInstancesTable().getModel();
+        model.addRow(new Object[]
+        {
+            uuid,
+            inputs[0],
+            inputs[1],
+            inputs[2],
+            inputs[3],
+            EvaluationResult.representation(expected),
+            EvaluationResult.representation(value),
+            correct
+        });
+    }
+
+    public void clearTrainingSetsTable()
+    {
+        DefaultTableModel model = (DefaultTableModel) getInstancesTable().getModel();
+        model.setRowCount(0);
+    }
+
+    public final void dock(JComponent dockable, String region, float size)
+    {
+        // Create the dockable component
+        CloseableView docker = new CloseableView(dockable.getName());
+        docker.setContentPane(dockable);
+
+        // Now dock
+        if (dockingPort.getDockables().isEmpty())
+        {
+            dockingPort.dock(docker);
+            firstDocked = docker;
+        }
+        else
+        {
+            firstDocked.dock(docker, region, size);
+        }
+    }
+
+    private boolean isDockedInternal(DockingPort port, JComponent component)
+    {
+        for (Iterator<?> it = port.getDockables().iterator(); it.
+             hasNext();)
+        {
+            CloseableView dockable = (CloseableView) it.next();
+            if ((JComponent) dockable.getContentPane() == component)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }
